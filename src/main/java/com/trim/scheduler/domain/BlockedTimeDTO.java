@@ -1,16 +1,19 @@
 package com.trim.scheduler.domain;
 
-import java.time.Instant;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+
+import java.time.Instant;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class AppointmentDTO {
+@NoArgsConstructor
+public class BlockedTimeDTO {
+    private Long calendarId;
     private Instant from;
     private Instant to;
-    private String name;
     private String description;
 }

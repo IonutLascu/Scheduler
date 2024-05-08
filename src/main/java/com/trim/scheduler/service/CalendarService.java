@@ -1,0 +1,13 @@
+package com.trim.scheduler.service;
+
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+public class CalendarService {
+    void generateCalendar() {
+
+    }
+}

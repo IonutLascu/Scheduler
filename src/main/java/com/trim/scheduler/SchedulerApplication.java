@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.trim.scheduler")
+@ComponentScan(basePackages = "com.trim.scheduler.config")
 public class SchedulerApplication {
 
 	public static void main(String[] args) {

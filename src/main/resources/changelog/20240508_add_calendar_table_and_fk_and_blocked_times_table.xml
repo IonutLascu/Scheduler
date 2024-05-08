@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="00000002-2024-05-07" author="scheduler-trim">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="calendars"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="calendars_seq" startValue="1"/>
+        <createTable tableName="calendars">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="owner_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="00000003-2024-05-07" author="scheduler-trim">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="appointments" columnName="calendar_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="appointments">
+            <column name="calendar_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="appointments"
+                baseColumnNames="calendar_id"
+                referencedTableName="calendars"
+                referencedColumnNames="id"
+                constraintName="fk_appointments_calendars"/>
+
+        <addColumn tableName="appointments">
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="00000004-2024-05-07" author="scheduler-trim">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="blocked_times"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="blocked_times_seq" startValue="1"/>
+        <createTable tableName="blocked_times">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="calendar_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_blocked_times_calendars" referencedTableName="calendars" referencedColumnNames="id"/>
+            </column>
+            <column name="from" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

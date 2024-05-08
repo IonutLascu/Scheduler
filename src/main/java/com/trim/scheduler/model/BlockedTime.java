@@ -2,8 +2,6 @@ package com.trim.scheduler.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,15 +23,19 @@ import java.time.Instant;
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
-@Table(name = "appointments")
+@Table(name = "blocked_times")
 @Data
-public class Appointment {
+public class BlockedTime {
 
     @Id
-    @SequenceGenerator(name = "appointments_sequence", sequenceName = "appointments_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointments_sequence")
+    @SequenceGenerator(name = "blocked_times_sequence", sequenceName = "blocked_times_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "blocked_times_sequence")
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "calendar_id", nullable = false)
+    private Calendar calendar;
 
     @Column(name = "from", nullable = false)
     private Instant from;
@@ -41,13 +43,6 @@ public class Appointment {
     @Column(name = "to", nullable = false)
     private Instant to;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
     @Column(name = "description")
     private String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calendar_id", nullable = false)
-    private Calendar calendar;
 }

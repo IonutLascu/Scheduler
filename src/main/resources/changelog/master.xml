@@ -7,5 +7,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <include file="changelog/20240507_create_database.xml"/>
+    <include file="changelog/20240508_add_calendar_table_and_fk_and_blocked_times_table.xml"/>
+    <include file="changelog/20240508_add_user_table.xml"/>
 
 </databaseChangeLog>

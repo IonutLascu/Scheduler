@@ -6,29 +6,32 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="00000001-2024-05-07" author="scheduler-trim">
+    <changeSet id="00000005-2024-05-07" author="scheduler-trim">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="appointments"/>
+                <tableExists tableName="users"/>
             </not>
         </preConditions>
-
-        <createSequence sequenceName="appointments_seq" startValue="1"/>
-        <createTable tableName="appointments">
+        <createSequence sequenceName="users_seq" startValue="1"/>
+        <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="from" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="to" type="timestamp">
+            <column name="role" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
-
-
 </databaseChangeLog>
