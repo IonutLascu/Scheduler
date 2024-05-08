@@ -1,0 +1,30 @@
+version: '3.8'
+networks:
+  app-network:
+    driver: bridge
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: schedulerDb
+      POSTGRES_USER: cogmaw
+      POSTGRES_PASSWORD: rizatorul
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+  liquibase:
+    image: liquibase/liquibase
+    depends_on:
+      - db
+    volumes:
+      - "./src/main/resources/changelog:/liquibase/changelog"
+    networks:
+      - app-network
+    command:
+      - "--logLevel=DEBUG"
+      - "--changeLogFile=/changelog/master.xml"
+      - "--url=jdbc:postgresql://db:5432/schedulerDb"
+      - "--username=cogmaw"
+      - "--password=rizatorul"
+      - "update"
