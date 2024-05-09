@@ -6,13 +6,16 @@ import com.trim.scheduler.domain.api.RegistrationRequest;
 import com.trim.scheduler.enums.ERole;
 import com.trim.scheduler.model.User;
 import com.trim.scheduler.repository.RoleRepository;
-import com.trim.scheduler.repository.UserRepository;
 import com.trim.scheduler.utils.ApiException;
 import com.trim.scheduler.utils.ErrorConstants;
 import com.trim.scheduler.utils.JwtUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,26 +25,32 @@ import java.util.Set;
 @AllArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ApiException("Something went wrong", ErrorConstants.UNKNOWN_ERROR, HttpStatus.INTERNAL_SERVER_ERROR));
+        var user = userService.findByEmailOrThrow(request.getEmail());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ApiException("Invalid credentials", ErrorConstants.INVALID_CREDENTIALS, HttpStatus.BAD_REQUEST);
         }
 
-        String token = jwtUtils.generateTokenFromEmail(user.getEmail());
+        String token = jwtUtils.generateTokenFromEmail(user.getEmail(), user.getId());
+
+        Authentication authentication = authenticationManager
+            .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return new AuthenticationResponse(token);
     }
 
     @Transactional
     public void register(RegistrationRequest request) {
-        var userOpt = userRepository.findByEmail(request.getEmail());
+        var userOpt = userService.findByEmail(request.getEmail());
         if (userOpt.isPresent()) {
             throw new ApiException("Something went wrong", ErrorConstants.UNKNOWN_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -61,6 +70,6 @@ public class AuthenticationService {
             .roles(Set.of(userRoleOpt.get()))
             .build();
 
-        userRepository.save(user);
+        userService.save(user);
     }
 }

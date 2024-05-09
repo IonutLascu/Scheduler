@@ -35,6 +35,8 @@ public class JwtUtils {
     @Value("${jwt.issuer}")
     private String issuer;
 
+    private final static String USER_ID = "user_id";
+
     public String getJwtFromCookies(HttpServletRequest request) {
       Cookie cookie = WebUtils.getCookie(request, jwtCookie);
       if (cookie != null) {
@@ -45,7 +47,7 @@ public class JwtUtils {
     }
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-      String jwt = generateTokenFromEmail(userPrincipal.getEmail());
+      String jwt = generateTokenFromEmail(userPrincipal.getEmail(), userPrincipal.getId());
       return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
@@ -53,9 +55,14 @@ public class JwtUtils {
       return ResponseCookie.from(jwtCookie, null).path("/api").build();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    public String getEmailFromJwtToken(String token) {
       return Jwts.parserBuilder().setSigningKey(key()).build()
           .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Long getLoggedInUserId() {
+        return Long.valueOf(Jwts.parserBuilder().setSigningKey(key()).build()
+            .parseClaimsJws(SecurityUtils.extractBearerToken()).getBody().get(USER_ID).toString());
     }
 
     private Key key() {
@@ -79,10 +86,11 @@ public class JwtUtils {
       return false;
     }
 
-    public String generateTokenFromEmail(String email) {
+    public String generateTokenFromEmail(String email, Long userId) {
       return Jwts.builder()
                  .setSubject(email)
                  .setIssuedAt(new Date())
+                 .claim(USER_ID, userId)
                  .setExpiration(new Date((new Date()).getTime() + expiration))
                  .signWith(key(), SignatureAlgorithm.HS256)
                  .setIssuer(issuer)
