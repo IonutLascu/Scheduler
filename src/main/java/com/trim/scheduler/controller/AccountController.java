@@ -20,9 +20,4 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("cici")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Sugi pula maestre");
-    }
-
 }
