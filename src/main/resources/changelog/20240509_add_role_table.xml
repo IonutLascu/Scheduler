@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="00000006-2024-05-07" author="scheduler-trim">
+
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addColumn tableName="users">
+            <column name="role_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                baseTableName="users"
+                baseColumnNames="role_id"
+                referencedTableName="roles"
+                referencedColumnNames="id"
+                constraintName="fk_user_role"/>
+
+        <sql>INSERT INTO roles(name) VALUES('ROLE_USER');</sql>
+        <sql>INSERT INTO roles(name) VALUES('ROLE_MODERATOR');</sql>
+        <sql>INSERT INTO roles(name) VALUES('ROLE_ADMIN');</sql>
+    </changeSet>
+</databaseChangeLog>
