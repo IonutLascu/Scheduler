@@ -32,6 +32,9 @@ public class JwtUtils {
     @Value("${jwt.cookie}")
     private String jwtCookie;
 
+    @Value("${jwt.issuer}")
+    private String issuer;
+
     public String getJwtFromCookies(HttpServletRequest request) {
       Cookie cookie = WebUtils.getCookie(request, jwtCookie);
       if (cookie != null) {
@@ -42,7 +45,7 @@ public class JwtUtils {
     }
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-      String jwt = generateTokenFromUsername(userPrincipal.getUsername());
+      String jwt = generateTokenFromEmail(userPrincipal.getEmail());
       return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
@@ -76,12 +79,13 @@ public class JwtUtils {
       return false;
     }
 
-    public String generateTokenFromUsername(String username) {
+    public String generateTokenFromEmail(String email) {
       return Jwts.builder()
-                 .setSubject(username)
+                 .setSubject(email)
                  .setIssuedAt(new Date())
                  .setExpiration(new Date((new Date()).getTime() + expiration))
                  .signWith(key(), SignatureAlgorithm.HS256)
+                 .setIssuer(issuer)
                  .compact();
     }
 }

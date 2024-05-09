@@ -31,9 +31,6 @@ public class User {
     @SequenceGenerator(name = "users_sequence", sequenceName = "users_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "role", nullable = false)
-    private String role;
-
     @Column(name = "name", nullable = false)
     private String name;
 
