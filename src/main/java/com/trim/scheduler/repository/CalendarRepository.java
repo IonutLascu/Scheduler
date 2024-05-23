@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     Optional<Calendar> findByOwnerId(Long ownerId);
+    Optional<Calendar> findByName(String name);
 }

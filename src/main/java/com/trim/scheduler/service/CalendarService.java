@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CalendarService {
@@ -34,5 +37,11 @@ public class CalendarService {
             calendarDTO = calendarMapper.toDto(calendarOpt.get());
         }
         return calendarDTO;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<CalendarDTO> findByName(String name) {
+        var calendarOpt = calendarRepository.findByName(name);
+        return calendarOpt.map(calendarMapper::toDto);
     }
 }

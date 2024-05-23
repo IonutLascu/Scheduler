@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CalendarDTO {
+    private Long id;
     private Long ownerId;
     private String name;
     private List<Appointment> appointments;

@@ -18,10 +18,10 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="from" type="timestamp">
+            <column name="start_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="to" type="timestamp">
+            <column name="end_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">

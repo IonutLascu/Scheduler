@@ -9,8 +9,9 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentDTO {
-    private Instant from;
-    private Instant to;
+    private Instant startDate;
+    private Instant endDate;
     private String name;
     private String description;
+    private String calendarName;
 }

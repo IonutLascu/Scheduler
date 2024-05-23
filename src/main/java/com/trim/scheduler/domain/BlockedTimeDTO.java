@@ -12,8 +12,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlockedTimeDTO {
-    private Long calendarId;
-    private Instant from;
-    private Instant to;
+    private Instant startDate;
+    private Instant endDate;
     private String description;
+    private Long calendarName;
 }

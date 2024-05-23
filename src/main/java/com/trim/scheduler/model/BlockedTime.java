@@ -37,11 +37,11 @@ public class BlockedTime {
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
 
-    @Column(name = "from", nullable = false)
-    private Instant from;
+    @Column(name = "start_date", nullable = false)
+    private Instant startDate;
 
-    @Column(name = "to", nullable = false)
-    private Instant to;
+    @Column(name = "end_date", nullable = false)
+    private Instant endDate;
 
     @Column(name = "description")
     private String description;

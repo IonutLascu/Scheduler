@@ -67,10 +67,10 @@
             <column name="calendar_id" type="bigint">
                 <constraints nullable="false" foreignKeyName="fk_blocked_times_calendars" referencedTableName="calendars" referencedColumnNames="id"/>
             </column>
-            <column name="from" type="timestamp">
+            <column name="start_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="to" type="timestamp">
+            <column name="end_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(255)"/>
