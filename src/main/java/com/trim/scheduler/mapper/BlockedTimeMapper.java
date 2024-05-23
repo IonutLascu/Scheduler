@@ -11,11 +11,12 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(config = MapperConfiguration.class)
-public interface BlockedTimeMapper extends BaseMapper<BlockedTimeDTO, BlockedTime>{
-
-    @Mapping(source = "calendar.name", target = "calendarName")
-    BlockedTimeDTO toDto(BlockedTime appointment);
+public interface BlockedTimeMapper extends BaseMapper<BlockedTimeDTO, BlockedTime> {
 
     @Override
-    List<BlockedTimeDTO> toDtoList(List<BlockedTime> appointments);
+    @Mapping(source = "calendar.name", target = "calendarName")
+    BlockedTimeDTO toDto(BlockedTime blockedTime);
+
+    @Override
+    List<BlockedTimeDTO> toDtoList(List<BlockedTime> blockedTimes);
 }

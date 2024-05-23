@@ -10,7 +10,9 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(config = MapperConfiguration.class)
-public interface AppointmentMapper extends BaseMapper<AppointmentDTO, Appointment>{
+public interface AppointmentMapper extends BaseMapper<AppointmentDTO, Appointment> {
+
+    @Override
     @Mapping(source = "calendar.name", target = "calendarName")
     AppointmentDTO toDto(Appointment appointment);
 

@@ -1,5 +1,6 @@
 package com.trim.scheduler.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,10 +34,6 @@ public class BlockedTime {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "calendar_id", nullable = false)
-    private Calendar calendar;
-
     @Column(name = "start_date", nullable = false)
     private Instant startDate;
 
@@ -45,4 +42,9 @@ public class BlockedTime {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "calendar_id", nullable = false)
+    @JsonIgnore
+    private Calendar calendar;
 }
