@@ -19,7 +19,6 @@ public class CalendarController {
     private final JwtUtils jwtUtils;
 
     @GetMapping
-    @PreAuthorize("hasRole(\"" + Authorities.USER + "\")")
     public CalendarDTO getCalendar() {
         var userId = jwtUtils.getLoggedInUserId();
         return calendarService.findByOwnerId(userId);

@@ -15,5 +15,5 @@ public class BlockedTimeDTO {
     private Instant startDate;
     private Instant endDate;
     private String description;
-    private Long calendarName;
+    private String calendarName;
 }
